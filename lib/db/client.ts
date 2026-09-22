@@ -7,12 +7,20 @@ const globalForPrisma = globalThis as unknown as {
 
 function createPrismaClient() {
   const databaseUrl = process.env.DATABASE_URL;
+
   if (!databaseUrl) {
     throw new Error("DATABASE_URL environment variable is required");
   }
 
+  const isLocal =
+    databaseUrl.includes("@localhost") ||
+    databaseUrl.includes("@127.0.0.1");
+
   return new PrismaClient({
-    adapter: new PrismaPg(databaseUrl),
+    adapter: new PrismaPg({
+      connectionString: databaseUrl,
+      ssl: isLocal ? undefined : { rejectUnauthorized: false },
+    }),
   });
 }
 
