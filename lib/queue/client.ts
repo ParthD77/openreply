@@ -13,8 +13,14 @@ export function getRedisConnection(): Redis {
   if (!connection) {
     connection = new Redis(process.env.REDIS_URL!, {
       maxRetriesPerRequest: null, // Required by BullMQ
+      tls: process.env.REDIS_URL?.startsWith("rediss://")
+        ? {
+            rejectUnauthorized: false,
+          }
+        : undefined,
     });
   }
+
   return connection;
 }
 
@@ -102,5 +108,6 @@ export function getDMQueue(): Queue<DmQueueJob> {
       },
     });
   }
+
   return dmQueue;
 }

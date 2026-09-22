@@ -12,7 +12,8 @@
     "db:migrate": "prisma migrate deploy",
     "worker": "tsx worker/dm-worker.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "heroku-postbuild": "npm run db:generate"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
